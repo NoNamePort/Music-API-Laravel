@@ -39,6 +39,12 @@ docker exec -it laravel_app php artisan migrate:fresh --seed
 В папке проекта находится Postman-коллекция Laravel_API.postman_collection.json.
 Импортируйте её в Postman и используйте для тестирования API.
 
+
+
+Прошу понять и не пинать.
+Делал в спешке.
+Могу лучше и чище.
+
 7. О проекте
 
 Приложение работает как API и также имеет веб-интерфейс.
