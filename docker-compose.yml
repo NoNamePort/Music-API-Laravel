@@ -1,0 +1,84 @@
+services:
+  app:
+    image: debian:latest
+    container_name: laravel_app
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "80:8000"
+    environment:
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=laravel
+      - DB_USERNAME=laravel
+      - DB_PASSWORD=laravel
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - laravel_network
+    command: >
+      /bin/bash -c "
+      apt update && apt install -y ffmpeg php-cli unzip curl git php-mysql php-xml php-mbstring php-bcmath php-tokenizer php-curl php-zip default-mysql-client &&
+      curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer &&
+      echo 'upload_max_filesize=100M' >> /etc/php/8.2/cli/php.ini &&
+      echo 'post_max_size=100M' >> /etc/php/8.2/cli/php.ini &&
+      composer install &&
+      cp .env.example .env || true &&
+      sed -i 's/DB_CONNECTION=sqlite/DB_CONNECTION=mysql/' .env &&
+      sed -i 's/# DB_HOST=.*/DB_HOST=mysql/' .env &&
+      sed -i 's/# DB_DATABASE=.*/DB_DATABASE=laravel/' .env &&
+      sed -i 's/# DB_USERNAME=.*/DB_USERNAME=laravel/' .env &&
+      sed -i 's/# DB_PASSWORD=.*/DB_PASSWORD=laravel/' .env &&
+      php artisan key:generate &&
+      echo 'Ожидание базы данных...' &&
+      until mysqladmin ping -h mysql --silent; do
+        sleep 1
+      done &&
+      php artisan migrate --force &&
+      php artisan serve --host=0.0.0.0 --port=8000
+      "
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - "3306:3306"
+    networks:
+      - laravel_network
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 20s
+      retries: 5
+      timeout: 10s
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - "7777:80"
+    environment:
+      - PMA_HOST=mysql
+      - MYSQL_ROOT_PASSWORD=root
+    depends_on:
+      - mysql
+    networks:
+      - laravel_network
+
+networks:
+  laravel_network:
+
+volumes:
+  mysql_data:

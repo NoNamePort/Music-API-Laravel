@@ -1,0 +1,331 @@
+{
+    "info": {
+        "name": "Laravel Music API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Регистрация",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"name\": \"Тест Тестов\",\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\",\n    \"password_confirmation\": \"password123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/auth/register",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "auth", "register"]
+                        }
+                    }
+                },
+                {
+                    "name": "Вход",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"test@example.com\",\n    \"password\": \"password123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/auth/login",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "auth", "login"]
+                        }
+                    }
+                },
+                {
+                    "name": "Выход",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/auth/logout",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "auth", "logout"]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Posts",
+            "item": [
+                {
+                    "name": "Получить список постов",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/posts?tag=test&sort_by=created_at&sort_direction=desc&page=1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "posts"],
+                            "query": [
+                                {
+                                    "key": "tag",
+                                    "value": "test",
+                                    "description": "Фильтр по тегу"
+                                },
+                                {
+                                    "key": "sort_by",
+                                    "value": "created_at",
+                                    "description": "Поле для сортировки (title, created_at, is_active)"
+                                },
+                                {
+                                    "key": "sort_direction",
+                                    "value": "desc",
+                                    "description": "Направление сортировки (asc, desc)"
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "1",
+                                    "description": "Номер страницы"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Создать пост",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "title",
+                                    "value": "Тестовый пост",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "description",
+                                    "value": "Описание тестового поста",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "is_active",
+                                    "value": "1",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "tags",
+                                    "value": "тег1, тег2, тег3",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "audio_file",
+                                    "type": "file",
+                                    "src": "/path/to/audio.mp3"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/posts",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "posts"]
+                        }
+                    }
+                },
+                {
+                    "name": "Получить пост",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/posts/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "posts", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Обновить пост",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "title",
+                                    "value": "Обновленный пост",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "description",
+                                    "value": "Обновленное описание",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "is_active",
+                                    "value": "1",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "tags",
+                                    "value": "тег1, тег2",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "audio_file",
+                                    "type": "file",
+                                    "src": "/path/to/new_audio.mp3"
+                                },
+                                {
+                                    "key": "remove_audio",
+                                    "value": "0",
+                                    "type": "text",
+                                    "description": "1 для удаления текущего аудио"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/api/posts/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "posts", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Удалить пост",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/posts/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "posts", "1"]
+                        }
+                    }
+                },
+                {
+                    "name": "Удалить тег у поста",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json",
+                                "type": "text"
+                            },
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{token}}",
+                                "type": "text"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/posts/1/tags/1",
+                            "host": ["{{base_url}}"],
+                            "path": ["api", "posts", "1", "tags", "1"]
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost"
+        },
+        {
+            "key": "token",
+            "value": "Ваш токен"
+        }
+    ]
+} 
